@@ -1,22 +1,22 @@
 {
-  "姓名": "陈晨",
-  "年龄": 29,
-  "职业": "软件开发工程师",
-  "健康状况": {
+  "name": "Sam Chen",
+  "age": 29,
+  "occupation": "Software Developer",
+  "health_status": {
     "BMI": 26.5,
-    "运动习惯": "几乎不运动",
-    "睡眠质量": "经常熬夜",
-    "饮食习惯": "不规律"
+    "exercise_habits": "Rarely exercises",
+    "sleep_quality": "Frequent late nights",
+    "diet_habits": "Irregular"
   },
-  "目标": "改善整体健康状况",
-  "约束条件": {
-    "工作时间": "9-6，偶尔加班",
-    "通勤时间": "1小时",
-    "预算限制": "中等"
+  "goal": "Improve overall health",
+  "constraints": {
+    "work_hours": "9-6, occasional overtime",
+    "commute_time": "1 hour",
+    "budget_limit": "Medium"
   },
-  "健康目标": {
-    "体重目标": "减重10kg",
-    "运动目标": "每周3次",
-    "睡眠目标": "11点前睡觉"
+  "health_goals": {
+    "weight_target": "Lose 10kg",
+    "exercise_target": "3 times per week",
+    "sleep_target": "Sleep before 11 PM"
   }
 }

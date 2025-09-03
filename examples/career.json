@@ -1,19 +1,19 @@
 {
-  "姓名": "张强",
-  "年龄": 32,
-  "工作年限": 8,
-  "当前职位": "高级软件工程师",
-  "管理经验": "团队Lead 2年",
-  "目标": "技术总监",
-  "技能评估": {
-    "技术能力": 8.5,
-    "管理能力": 6.0,
-    "沟通能力": 7.0,
-    "战略思维": 5.5
+  "name": "Jordan Smith",
+  "age": 32,
+  "years_experience": 8,
+  "current_position": "Senior Software Engineer",
+  "management_experience": "Team Lead for 2 years",
+  "goal": "Technical Director",
+  "skill_assessment": {
+    "technical_ability": 8.5,
+    "management_ability": 6.0,
+    "communication_ability": 7.0,
+    "strategic_thinking": 5.5
   },
-  "发展重点": [
-    "团队管理",
-    "技术架构",
-    "商业理解"
+  "development_focus": [
+    "Team management",
+    "Technical architecture",
+    "Business understanding"
   ]
 }

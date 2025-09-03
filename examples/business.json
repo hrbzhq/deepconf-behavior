@@ -1,0 +1,23 @@
+{
+  "name": "Taylor Wong",
+  "age": 35,
+  "background": "Former big tech CTO",
+  "product_idea": "Project management SaaS for SMEs",
+  "risk_tolerance": "Medium",
+  "business_experience": {
+    "previous_startups": 1,
+    "management_years": 8,
+    "technical_expertise": "High",
+    "business_knowledge": "Medium"
+  },
+  "resources": {
+    "funding_available": "$500K",
+    "team_size": "2 co-founders",
+    "runway_months": 18
+  },
+  "market_analysis": {
+    "target_market": "SME project management",
+    "competition_level": "High",
+    "unique_value_prop": "AI-powered automation"
+  }
+}
