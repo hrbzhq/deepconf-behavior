@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-DeepConf 命令行工具
-==================
+DeepConf Command Line Interface
+===============================
 
-提供便捷的命令行接口来运行DeepConf实验。
+Provides convenient command-line interface for running DeepConf experiments.
 
-使用示例:
-    # 基础使用
-    python cli.py --prompt "解释量子计算" --model qwen3:0.6b
+Usage Examples:
+    # Basic usage
+    python cli.py --prompt "Explain quantum computing" --model qwen3:0.6b
 
-    # 自定义参数
-    python cli.py --prompt "求解数学题" --num-paths 8 --keep-ratio 0.8 --mode online
+    # Custom parameters
+    python cli.py --prompt "Solve math problem" --num-paths 8 --keep-ratio 0.8 --mode online
 
-    # 批量测试
+    # Batch testing
     python cli.py --input-file prompts.txt --output-dir results/
 """
 
@@ -27,21 +27,21 @@ from deepconf_complete import create_deepconf_runner, DeepConfConfig
 
 @click.group()
 def cli():
-    """DeepConf 命令行工具 - 集成行为分析功能"""
+    """DeepConf Command Line Tool - Integrated Behavioral Analysis"""
     pass
 
 @cli.command()
-@click.option('--profile', '-p', required=True, help='用户画像JSON文件路径或JSON字符串')
-@click.option('--model', '-m', default='qwen3:0.6b', help='模型名称')
+@click.option('--profile', '-p', required=True, help='User profile JSON file path or JSON string')
+@click.option('--model', '-m', default='qwen3:0.6b', help='Model name')
 @click.option('--backend', '-b', default='ollama', 
-              type=click.Choice(['ollama', 'huggingface']), help='模型后端')
-@click.option('--multimodal', help='多模态数据源JSON文件路径')
-@click.option('--output', '-o', help='输出文件路径')
-@click.option('--report', '-r', help='生成报告文件路径')
-@click.option('--verbose', '-v', is_flag=True, help='详细输出')
+              type=click.Choice(['ollama', 'huggingface']), help='Model backend')
+@click.option('--multimodal', help='Multimodal data sources JSON file path')
+@click.option('--output', '-o', help='Output file path')
+@click.option('--report', '-r', help='Generate report file path')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
 def behavior(profile: str, model: str, backend: str, multimodal: Optional[str],
              output: Optional[str], report: Optional[str], verbose: bool):
-    """运行行为轨迹分析"""
+    """Run behavioral trajectory analysis"""
     import asyncio
     import json
     from pathlib import Path
@@ -49,35 +49,35 @@ def behavior(profile: str, model: str, backend: str, multimodal: Optional[str],
     try:
         from deepconf_with_behavior import create_integrated_analyzer
     except ImportError:
-        click.echo("❌ 行为分析功能不可用，请检查extensions/behavior_analysis是否正确安装", err=True)
+        click.echo("❌ Behavioral analysis functionality unavailable, please check if extensions/behavior_analysis is properly installed", err=True)
         return
     
     if verbose:
-        click.echo(f"🎯 启动行为分析...")
-        click.echo(f"   模型: {model}")
-        click.echo(f"   后端: {backend}")
+        click.echo(f"🎯 Starting behavioral analysis...")
+        click.echo(f"   Model: {model}")
+        click.echo(f"   Backend: {backend}")
     
     try:
-        # 解析用户画像
+        # Parse user profile
         if profile.startswith('{'):
             profile_data = json.loads(profile)
         else:
             with open(profile, 'r', encoding='utf-8') as f:
                 profile_data = json.load(f)
         
-        # 解析多模态数据源
+        # Parse multimodal data sources
         multimodal_data = None
         if multimodal:
             with open(multimodal, 'r', encoding='utf-8') as f:
                 multimodal_data = json.load(f)
         
-        # 创建分析器
+        # Create analyzer
         analyzer = create_integrated_analyzer(
             model_backend=backend,
             model_name=model
         )
         
-        # 执行分析
+        # Execute analysis
         async def run_analysis():
             result = await analyzer.analyze_behavior(
                 profile_data=profile_data,
@@ -87,53 +87,53 @@ def behavior(profile: str, model: str, backend: str, multimodal: Optional[str],
         
         result = asyncio.run(run_analysis())
         
-        # 输出结果
+        # Output results
         if output:
             with open(output, 'w', encoding='utf-8') as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
-            click.echo(f"✅ 结果已保存到: {output}")
+            click.echo(f"✅ Results saved to: {output}")
         
-        # 生成报告
+        # Generate report
         if report and result.get('status') == 'success':
-            report_content = f"""# 行为轨迹分析报告
+            report_content = f"""# Behavioral Trajectory Analysis Report
 
-## 分析概览
-- 分析状态: {result['status']}
-- 路径数量: {len(result.get('paths', []))}
-- 平均置信度: {result.get('confidence', 0):.3f}
+## Analysis Overview
+- Analysis Status: {result['status']}
+- Path Count: {len(result.get('paths', []))}
+- Average Confidence: {result.get('confidence', 0):.3f}
 
-## 详细结果
+## Detailed Results
 {json.dumps(result, ensure_ascii=False, indent=2)}
 """
             with open(report, 'w', encoding='utf-8') as f:
                 f.write(report_content)
-            click.echo(f"📄 报告已保存到: {report}")
+            click.echo(f"📄 Report saved to: {report}")
         
         if verbose:
-            click.echo("📊 分析完成")
-            click.echo(f"   状态: {result.get('status', 'unknown')}")
-            click.echo(f"   置信度: {result.get('confidence', 0):.3f}")
+            click.echo("📊 Analysis completed")
+            click.echo(f"   Status: {result.get('status', 'unknown')}")
+            click.echo(f"   Confidence: {result.get('confidence', 0):.3f}")
         
     except Exception as e:
-        click.echo(f"❌ 分析失败: {e}", err=True)
+        click.echo(f"❌ Analysis failed: {e}", err=True)
         if verbose:
             import traceback
             click.echo(traceback.format_exc())
 
 @cli.command()
-@click.option('--prompt', '-p', required=True, help='分析提示词')
-@click.option('--profile', required=True, help='用户画像JSON文件路径或JSON字符串')
-@click.option('--model', '-m', default='qwen3:0.6b', help='模型名称')
+@click.option('--prompt', '-p', required=True, help='Analysis prompt')
+@click.option('--profile', required=True, help='User profile JSON file path or JSON string')
+@click.option('--model', '-m', default='qwen3:0.6b', help='Model name')
 @click.option('--backend', '-b', default='ollama', 
-              type=click.Choice(['ollama', 'huggingface']), help='模型后端')
-@click.option('--multimodal', help='多模态数据源JSON文件路径')
-@click.option('--output', '-o', help='输出文件路径')
-@click.option('--report', '-r', help='生成报告文件路径')
-@click.option('--verbose', '-v', is_flag=True, help='详细输出')
+              type=click.Choice(['ollama', 'huggingface']), help='Model backend')
+@click.option('--multimodal', help='Multimodal data sources JSON file path')
+@click.option('--output', '-o', help='Output file path')
+@click.option('--report', '-r', help='Generate report file path')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
 def integrated(prompt: str, profile: str, model: str, backend: str, 
                multimodal: Optional[str], output: Optional[str], 
                report: Optional[str], verbose: bool):
-    """运行集成分析(DeepConf + 行为分析)"""
+    """Run integrated analysis (DeepConf + Behavioral Analysis)"""
     import asyncio
     import json
     from pathlib import Path
@@ -141,36 +141,36 @@ def integrated(prompt: str, profile: str, model: str, backend: str,
     try:
         from deepconf_with_behavior import create_integrated_analyzer
     except ImportError:
-        click.echo("❌ 集成分析功能不可用，请检查相关依赖", err=True)
+        click.echo("❌ Integrated analysis functionality unavailable, please check related dependencies", err=True)
         return
     
     if verbose:
-        click.echo(f"🔄 启动集成分析...")
-        click.echo(f"   提示: {prompt[:50]}...")
-        click.echo(f"   模型: {model}")
-        click.echo(f"   后端: {backend}")
+        click.echo(f"🔄 Starting integrated analysis...")
+        click.echo(f"   Prompt: {prompt[:50]}...")
+        click.echo(f"   Model: {model}")
+        click.echo(f"   Backend: {backend}")
     
     try:
-        # 解析用户画像
+        # Parse user profile
         if profile.startswith('{'):
             profile_data = json.loads(profile)
         else:
             with open(profile, 'r', encoding='utf-8') as f:
                 profile_data = json.load(f)
         
-        # 解析多模态数据源
+        # Parse multimodal data sources
         multimodal_data = None
         if multimodal:
             with open(multimodal, 'r', encoding='utf-8') as f:
                 multimodal_data = json.load(f)
         
-        # 创建分析器
+        # Create analyzer
         analyzer = create_integrated_analyzer(
             model_backend=backend,
             model_name=model
         )
         
-        # 执行集成分析
+        # Execute integrated analysis
         async def run_analysis():
             result = await analyzer.integrated_analysis(
                 prompt=prompt,
@@ -181,9 +181,9 @@ def integrated(prompt: str, profile: str, model: str, backend: str,
         
         result = asyncio.run(run_analysis())
         
-        # 输出结果
+        # Output results
         if output:
-            # 将结果转换为可序列化的格式
+            # Convert results to serializable format
             serializable_result = {
                 'deepconf_result': result.deepconf_result,
                 'deepconf_confidence': result.deepconf_confidence,
@@ -195,89 +195,89 @@ def integrated(prompt: str, profile: str, model: str, backend: str,
             
             with open(output, 'w', encoding='utf-8') as f:
                 json.dump(serializable_result, f, ensure_ascii=False, indent=2)
-            click.echo(f"✅ 结果已保存到: {output}")
+            click.echo(f"✅ Results saved to: {output}")
         
-        # 生成报告
+        # Generate report
         if report:
             report_content = analyzer.generate_integrated_report(result)
             with open(report, 'w', encoding='utf-8') as f:
                 f.write(report_content)
-            click.echo(f"📄 报告已保存到: {report}")
+            click.echo(f"📄 Report saved to: {report}")
         
         if verbose:
-            click.echo("📊 集成分析完成")
-            click.echo(f"   综合置信度: {result.integrated_confidence:.3f}")
-            click.echo(f"   分析一致性: {result.analysis_consistency:.3f}")
-            click.echo(f"   推荐评分: {result.recommendation_score:.3f}")
+            click.echo("📊 Integrated analysis completed")
+            click.echo(f"   Integrated Confidence: {result.integrated_confidence:.3f}")
+            click.echo(f"   Analysis Consistency: {result.analysis_consistency:.3f}")
+            click.echo(f"   Recommendation Score: {result.recommendation_score:.3f}")
         
     except Exception as e:
-        click.echo(f"❌ 集成分析失败: {e}", err=True)
+        click.echo(f"❌ Integrated analysis failed: {e}", err=True)
         if verbose:
             import traceback
             click.echo(traceback.format_exc())
 
 @cli.command()
-@click.option('--prompt', '-p', required=True, help='输入提示')
-@click.option('--model', '-m', default='qwen3:0.6b', help='模型名称')
+@click.option('--prompt', '-p', required=True, help='Input prompt')
+@click.option('--model', '-m', default='qwen3:0.6b', help='Model name')
 @click.option('--backend', '-b', default='ollama', 
-              type=click.Choice(['ollama', 'huggingface']), help='模型后端')
-@click.option('--num-paths', '-n', default=8, help='生成路径数量')
-@click.option('--keep-ratio', '-k', default=0.8, help='保留路径比例')
+              type=click.Choice(['ollama', 'huggingface']), help='Model backend')
+@click.option('--num-paths', '-n', default=8, help='Number of paths to generate')
+@click.option('--keep-ratio', '-k', default=0.8, help='Path keep ratio')
 @click.option('--mode', default='offline', 
-              type=click.Choice(['offline', 'online']), help='运行模式')
-@click.option('--output', '-o', help='输出文件路径')
-@click.option('--verbose', '-v', is_flag=True, help='详细输出')
+              type=click.Choice(['offline', 'online']), help='Execution mode')
+@click.option('--output', '-o', help='Output file path')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
 def run(prompt: str, model: str, backend: str, num_paths: int, 
         keep_ratio: float, mode: str, output: Optional[str], verbose: bool):
-    """运行单个DeepConf推理任务"""
+    """Run single DeepConf reasoning task"""
     
     if verbose:
-        click.echo(f"🚀 启动DeepConf...")
-        click.echo(f"   提示: {prompt[:50]}...")
-        click.echo(f"   模型: {model}")
-        click.echo(f"   后端: {backend}")
-        click.echo(f"   路径数: {num_paths}")
-        click.echo(f"   保留比例: {keep_ratio}")
-        click.echo(f"   模式: {mode}")
+        click.echo(f"🚀 Starting DeepConf...")
+        click.echo(f"   Prompt: {prompt[:50]}...")
+        click.echo(f"   Model: {model}")
+        click.echo(f"   Backend: {backend}")
+        click.echo(f"   Paths: {num_paths}")
+        click.echo(f"   Keep ratio: {keep_ratio}")
+        click.echo(f"   Mode: {mode}")
     
     try:
-        # 创建配置
+        # Create configuration
         config = DeepConfConfig(
             num_paths=num_paths,
             keep_ratio=keep_ratio
         )
         
-        # 创建运行器
+        # Create runner
         runner = create_deepconf_runner(
             backend_type=backend,
             model_path=model,
             config=config
         )
         
-        # 执行推理
+        # Execute reasoning
         if mode == 'offline':
             result = runner.run_offline(prompt)
         else:
             result = runner.run_online(prompt)
         
-        # 输出结果
+        # Output results
         if output:
             with open(output, 'w', encoding='utf-8') as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
-            click.echo(f"✅ 结果已保存到: {output}")
+            click.echo(f"✅ Results saved to: {output}")
         
         if verbose:
-            click.echo("📊 推理完成")
-            click.echo(f"   最终答案: {result['final_answer'][:100]}...")
-            click.echo(f"   生成路径: {len(result['all_paths'])}")
-            click.echo(f"   保留路径: {len(result['kept_paths'])}")
-            click.echo(f"   平均置信度: {sum(result['kept_confidences'])/len(result['kept_confidences']):.3f}")
+            click.echo("📊 Reasoning completed")
+            click.echo(f"   Final answer: {result['final_answer'][:100]}...")
+            click.echo(f"   Generated paths: {len(result['all_paths'])}")
+            click.echo(f"   Kept paths: {len(result['kept_paths'])}")
+            click.echo(f"   Average confidence: {sum(result['kept_confidences'])/len(result['kept_confidences']):.3f}")
         else:
-            click.echo("✅ 推理完成")
-            click.echo(f"最终答案: {result['final_answer']}")
+            click.echo("✅ Reasoning completed")
+            click.echo(f"Final answer: {result['final_answer']}")
         
     except Exception as e:
-        click.echo(f"❌ 推理失败: {e}", err=True)
+        click.echo(f"❌ Reasoning failed: {e}", err=True)
         if verbose:
             import traceback
             click.echo(traceback.format_exc())
