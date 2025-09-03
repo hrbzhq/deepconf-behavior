@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-简化的基准测试 - 用于生成论文数据
-==================================
+Simplified Benchmark Suite - For Paper Data Generation
+======================================================
 """
 
 import asyncio
@@ -14,82 +14,82 @@ import pandas as pd
 
 from deepconf_with_behavior import create_integrated_analyzer
 
-# 内嵌测试数据
+# Embedded test data
 test_cases = [
     {
-        "prompt": "制定个人化的机器学习学习路径，考虑基础薄弱但学习能力强的情况",
+        "prompt": "Create a personalized machine learning learning path for someone with weak foundation but strong learning ability",
         "profile": {
-            "姓名": "李华",
-            "年龄": 24,
-            "专业": "计算机科学",
-            "当前技能": ["Python基础", "数据结构"],
-            "目标": "成为机器学习工程师",
-            "学习风格": "实践导向"
+            "name": "Alex Lee",
+            "age": 24,
+            "major": "Computer Science",
+            "current_skills": ["Python basics", "Data structures"],
+            "goal": "Become a machine learning engineer",
+            "learning_style": "Practice-oriented"
         },
         "domain": "education",
         "expected_confidence": 0.75
     },
     {
-        "prompt": "分析软件工程师向技术管理岗位转型的可行性和路径",
+        "prompt": "Analyze the feasibility and path for a software engineer transitioning to technical management",
         "profile": {
-            "姓名": "张强",
-            "年龄": 32,
-            "工作年限": 8,
-            "当前职位": "高级软件工程师",
-            "管理经验": "团队Lead 2年",
-            "目标": "技术总监"
+            "name": "Jordan Smith",
+            "age": 32,
+            "years_experience": 8,
+            "current_position": "Senior Software Engineer",
+            "management_experience": "Team Lead for 2 years",
+            "goal": "Technical Director"
         },
         "domain": "career",
         "expected_confidence": 0.80
     },
     {
-        "prompt": "为久坐程序员制定全面的健康改善计划",
+        "prompt": "Develop a comprehensive health improvement plan for sedentary programmers",
         "profile": {
-            "姓名": "陈晨",
-            "年龄": 29,
-            "职业": "软件开发工程师",
-            "健康状况": {
+            "name": "Sam Chen",
+            "age": 29,
+            "occupation": "Software Developer",
+            "health_status": {
                 "BMI": 26.5,
-                "运动习惯": "几乎不运动",
-                "睡眠质量": "经常熬夜"
+                "exercise_habits": "Rarely exercises",
+                "sleep_quality": "Frequent late nights"
             },
-            "目标": "改善整体健康状况"
+            "goal": "Improve overall health"
         },
         "domain": "lifestyle",
         "expected_confidence": 0.65
     },
     {
-        "prompt": "评估技术背景创业者进入SaaS市场的商业计划可行性", 
+        "prompt": "Evaluate the business plan feasibility for tech entrepreneurs entering the SaaS market", 
         "profile": {
-            "姓名": "周创",
-            "年龄": 35,
-            "背景": "前大厂技术总监",
-            "产品想法": "面向中小企业的项目管理SaaS",
-            "风险承受能力": "中等"
+            "name": "Taylor Wong",
+            "age": 35,
+            "background": "Former big tech CTO",
+            "product_idea": "Project management SaaS for SMEs",
+            "risk_tolerance": "Medium"
         },
         "domain": "business",
         "expected_confidence": 0.55
     },
     {
-        "prompt": "制定计算机视觉PhD学生的研究方向选择和论文发表策略",
+        "prompt": "Create research direction selection and publication strategy for computer vision PhD students",
         "profile": {
-            "姓名": "李研",
-            "年龄": 26,
-            "学历": "硕士在读",
-            "研究兴趣": ["目标检测", "图像分割"],
-            "目标": "顶会论文发表"
+            "name": "Riley Park",
+            "age": 26,
+            "education": "Master's student",
+            "research_interests": ["Object detection", "Image segmentation"],
+            "goal": "Top-tier conference publications"
         },
         "domain": "research",
         "expected_confidence": 0.85
     },
     {
-        "prompt": "为内向型技术人员制定职场社交能力提升方案",
+        "prompt": "Develop workplace social skills improvement plan for introverted tech professionals",
         "profile": {
-            "姓名": "赵静",
-            "年龄": 27,
-            "性格": "内向，不善表达",
-            "职位": "后端开发工程师",
-            "目标": "提升职场影响力"
+            "name": "Casey Kim",
+            "age": 27,
+            "personality": "Introverted, not good at expression",
+            "position": "Backend Developer",
+            "goal": "Enhance workplace influence"
         },
         "domain": "social",
         "expected_confidence": 0.70
@@ -97,16 +97,16 @@ test_cases = [
 ]
 
 async def run_benchmark():
-    """运行基准测试"""
-    print("🚀 开始 DeepConf-Behavior 基准测试")
+    """Run benchmark testing"""
+    print("🚀 Starting DeepConf-Behavior Benchmark")
     print("=" * 50)
     
     analyzer = create_integrated_analyzer()
     results = []
     
     for i, test_case in enumerate(test_cases, 1):
-        print(f"\n📋 测试 {i}/{len(test_cases)}: {test_case['domain']}")
-        print(f"   用户: {test_case['profile'].get('姓名', 'Unknown')}")
+        print(f"\n📋 Test {i}/{len(test_cases)}: {test_case['domain']}")
+        print(f"   User: {test_case['profile'].get('name', 'Unknown')}")
         
         start_time = time.time()
         
@@ -134,11 +134,11 @@ async def run_benchmark():
             
             results.append(test_result)
             
-            print(f"   ✅ 完成 - 置信度: {result.integrated_confidence:.3f} (预期: {test_case['expected_confidence']:.3f})")
-            print(f"   ⏱️ 耗时: {execution_time:.1f}s")
+            print(f"   ✅ Completed - Confidence: {result.integrated_confidence:.3f} (Expected: {test_case['expected_confidence']:.3f})")
+            print(f"   ⏱️ Duration: {execution_time:.1f}s")
             
         except Exception as e:
-            print(f"   ❌ 失败: {str(e)}")
+            print(f"   ❌ Failed: {str(e)}")
             results.append({
                 'test_id': f"test_{i:03d}",
                 'domain': test_case['domain'],
@@ -147,30 +147,30 @@ async def run_benchmark():
                 'status': 'failed'
             })
         
-        # 避免过于频繁的请求
+        # Avoid too frequent requests
         await asyncio.sleep(2)
     
-    # 分析结果
+    # Analyze results
     successful_results = [r for r in results if r['status'] == 'success']
     
     print("\n" + "=" * 50)
-    print("📊 基准测试结果")
+    print("📊 Benchmark Results")
     print("=" * 50)
     
     if successful_results:
-        # 基础统计
+        # Basic statistics
         confidences = [r['integrated_confidence'] for r in successful_results]
         consistencies = [r['analysis_consistency'] for r in successful_results]
         exec_times = [r['execution_time'] for r in successful_results]
         errors = [r['confidence_error'] for r in successful_results]
         
-        print(f"✅ 成功率: {len(successful_results)}/{len(results)} ({len(successful_results)/len(results)*100:.1f}%)")
-        print(f"📈 平均置信度: {statistics.mean(confidences):.3f} ± {statistics.stdev(confidences) if len(confidences) > 1 else 0:.3f}")
-        print(f"🔄 平均一致性: {statistics.mean(consistencies):.3f} ± {statistics.stdev(consistencies) if len(consistencies) > 1 else 0:.3f}")
-        print(f"⏱️ 平均执行时间: {statistics.mean(exec_times):.1f}s ± {statistics.stdev(exec_times) if len(exec_times) > 1 else 0:.1f}s")
-        print(f"🎯 平均预测误差: {statistics.mean(errors):.3f}")
+        print(f"✅ Success Rate: {len(successful_results)}/{len(results)} ({len(successful_results)/len(results)*100:.1f}%)")
+        print(f"📈 Average Confidence: {statistics.mean(confidences):.3f} ± {statistics.stdev(confidences) if len(confidences) > 1 else 0:.3f}")
+        print(f"🔄 Average Consistency: {statistics.mean(consistencies):.3f} ± {statistics.stdev(consistencies) if len(consistencies) > 1 else 0:.3f}")
+        print(f"⏱️ Average Execution Time: {statistics.mean(exec_times):.1f}s ± {statistics.stdev(exec_times) if len(exec_times) > 1 else 0:.1f}s")
+        print(f"🎯 Average Prediction Error: {statistics.mean(errors):.3f}")
         
-        # 按领域统计
+        # Domain statistics
         domain_stats = {}
         for result in successful_results:
             domain = result['domain']
@@ -178,27 +178,27 @@ async def run_benchmark():
                 domain_stats[domain] = []
             domain_stats[domain].append(result)
         
-        print(f"\n📈 按领域统计:")
+        print(f"\n📈 Domain Statistics:")
         for domain, domain_results in domain_stats.items():
             domain_confidences = [r['integrated_confidence'] for r in domain_results]
             avg_conf = statistics.mean(domain_confidences)
-            print(f"  {domain}: 平均置信度 {avg_conf:.3f} ({len(domain_results)}个测试)")
+            print(f"  {domain}: Average confidence {avg_conf:.3f} ({len(domain_results)} tests)")
     
-    # 保存结果
+    # Save results
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     results_dir = Path("benchmark_results")
     results_dir.mkdir(exist_ok=True)
     
-    # 保存原始数据
+    # Save raw data
     with open(results_dir / f"benchmark_results_{timestamp}.json", 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2, default=str)
     
-    # 保存CSV格式
+    # Save CSV format
     if results:
         df = pd.DataFrame(results)
         df.to_csv(results_dir / f"benchmark_summary_{timestamp}.csv", index=False)
     
-    print(f"\n💾 结果已保存:")
+    print(f"\n💾 Results saved:")
     print(f"   JSON: benchmark_results/benchmark_results_{timestamp}.json")
     print(f"   CSV: benchmark_results/benchmark_summary_{timestamp}.csv")
     
